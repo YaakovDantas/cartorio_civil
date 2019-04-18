@@ -1,12 +1,15 @@
 from django.contrib import admin
-from .models import Nascimento, Casamento, Natimorto, Divorcio
+from .models import Nascimento, Casamento, Natimorto, Divorcio, Livro
 from django.utils.safestring import mark_safe
 
 # Register your models here.
 
+class AdminLivro(admin.ModelAdmin):
+	list_display = ('nome',)
+
 class AdminNascimento(admin.ModelAdmin):
-	list_display = ('nome', 'cpf', 'mae', 'ver_imagem') 
-	search_fields = ('nome', 'cpf', 'mae')
+	list_display = ('nome', 'cpf', 'mae','livro', 'ver_imagem') 
+	search_fields = ('nome', 'cpf', 'mae','livro__nome')
 
 	def ver_imagem(self, object):
 		#return mark_safe('<image src="%s" />' % object.imagem.url)
@@ -51,6 +54,7 @@ class AdminDivorcio(admin.ModelAdmin):
 	ver_imagem.allow_tags = True
 	ver_imagem.short_description = 'Imagem'	
 
+admin.site.register(Livro, AdminLivro)
 admin.site.register(Nascimento, AdminNascimento)
 admin.site.register(Casamento, AdminCasamento)
 admin.site.register(Divorcio, AdminDivorcio)
